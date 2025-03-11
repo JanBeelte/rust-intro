@@ -51,6 +51,33 @@ pub fn read_numbers_from_file(path: &str) -> Result<Vec<i32>, FileParseError> {
         .collect()
 }
 
+pub fn error_example() {
+    println!("\nError handling example (manual implementation):");
+    
+    // Try reading from a non-existent file
+    match read_numbers_from_file("nonexistent.txt") {
+        Ok(numbers) => println!("Numbers: {:?}", numbers),
+        Err(e) => println!("Error: {}", e),
+    }
+
+    // Create a file with invalid content
+    std::fs::write("test.txt", "1\nnot_a_number\n3").unwrap();
+    match read_numbers_from_file("test.txt") {
+        Ok(numbers) => println!("Numbers: {:?}", numbers),
+        Err(e) => println!("Error: {}", e),
+    }
+
+    std::fs::write("test.txt", "1\n2\n3").unwrap();
+    match read_numbers_from_file("test.txt") {
+        Ok(numbers) => println!("Numbers: {:?}", numbers),
+        Err(e) => println!("Error: {}", e),
+    }
+
+
+    // Clean up
+    let _ = std::fs::remove_file("test.txt");
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
